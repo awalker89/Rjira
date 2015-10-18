@@ -1,11 +1,6 @@
 
 
 
-##
-
-
-## create an issue
-
 if(FALSE){
   
   
@@ -17,36 +12,43 @@ if(FALSE){
   options("jira_url" = "https://rwrapper.atlassian.net")
   options("jira_project" = "ADM")
   
+  #### -------------------------------------------
   ## Testing variables
   jira_url = getOption("jira_url")
   jira_user = getOption("jira_user")
   jira_password = getOption("jira_password")
   verbose = getOption("jira_verbose")
   project_key = getOption("jira_project")
+  #### -------------------------------------------
   
   
-  ## create a new issue
-  issue <- Issue$new()
+  ## create a new issue object in R
+  issue <- create_issue()
   issue$project_key <- "ADM"
   issue$assignee <- "admin"
   issue$issue_type <- "Bug"
-  issue$summary = "Testing using reference class objects"
-  issue$description = "Test description for reference class Issue"
+  issue$summary <- "Testing using reference class objects"
+  issue$description <- "Test description for reference class Issue"
   
-  ## Actually create the ticket on JIRA
-  post_issue(issue)
+  post_issue(issue) ## post the issue to JIRA 
+  
+  
+  
   
   ## Get a list of projects
-  get_projects() ## clean up output from here
+  get_projects() ## needt to clean up output from here
+  
   
   ## Get list of issues under a project
-  get_issues(project = "ADM")
+  get_issues(project = "ADM") ## need to parse this to issue objects
+  
+  
   
   ## Get list of issues assigned to user
   get_issues(user = "bwalker" , project_key = getOption("jira_project"))
   
   
-  
+  ## 
   
   
   

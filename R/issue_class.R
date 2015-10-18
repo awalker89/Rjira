@@ -10,6 +10,20 @@
 
 
 
+#' @name create_issue
+#' @title Create an Issue object
+#' @return Issue object
+#' @export
+#' @examples
+#' create_issue()
+create_issue <- function(){
+  return(Issue$new())
+}
+
+
+
+
+
 Issue <- setRefClass(
   
   Class = "Issue",
