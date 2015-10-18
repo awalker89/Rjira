@@ -10,3 +10,4 @@ License: GPL-3
 LazyData: TRUE
 Imports:
     httr
+   ,RJSONIO
