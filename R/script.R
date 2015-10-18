@@ -32,7 +32,10 @@ if(FALSE){
   
   post_issue(issue) ## post the issue to JIRA 
   
-  
+  ## write comment to issue
+  issue_id <- "ADM-1"
+  comment <- "this is a test comment via API 2"
+  add_c
   
   
   ## Get a list of projects
@@ -40,7 +43,7 @@ if(FALSE){
   
   
   ## Get list of issues under a project
-  get_issues(project = "ADM") ## need to parse this to issue objects
+  issues <- get_issues(project = "ADM") ## need to parse this to issue objects
   
   
   
@@ -51,11 +54,41 @@ if(FALSE){
   ## 
   
   
+}
+
+
+#' @name write_comment
+#' @title Comment on an existing issue
+#' @param jira_url base url to jira. Defaults to 'jira/'
+#' @return string
+#' @export
+write_comment <- function(issue_id
+                          , comment
+                          , jira_url = getOption("jira_url")
+                          , jira_user = getOption("jira_user")
+                          , jira_password = getOption("jira_password")
+                          , verbose = getOption("jira_verbose")
+){
   
   
+  url <- paste0(issue_url(jira_url = jira_url), issue_id, "/comment")
   
+  x <- list(body = comment)
+
+  res <- POST(url = url,
+       body = RJSONIO::toJSON(x),
+       authenticate(user = jira_user, password = jira_password, "basic"),
+       add_headers("Content-Type" = "application/json"),
+       verbose(data_out = verbose, data_in = verbose, info = verbose)
+  )
+  
+  res <- content(res, as = "parsed")
+  
+  return(res)
   
 }
+
+
 
 
 
@@ -89,35 +122,6 @@ post_issue <- function(  issue
 
 
 
-
-
-
-
-jira_get <- function(url = url, user = user, password = password, verbose = verbose){
-  
-  res <- GET(url = url,
-             authenticate(user = user, password = password, "basic"),
-             add_headers("Content-Type" = "application/json"),
-             verbose(data_out = verbose, data_in = verbose, info = verbose)
-  )
-  
-  return(res)
-}
-
-
-
-
-
-jira_post <- function(x, url, user, password, verbose){
-  
-  POST(url = url,
-       body = RJSONIO::toJSON(x),
-       authenticate(user = user, password = password, "basic"),
-       add_headers("Content-Type" = "application/json"),
-       verbose(data_out = verbose, data_in = verbose, info = verbose)
-  )
-  
-}
 
 
 
