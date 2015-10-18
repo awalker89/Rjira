@@ -1,2 +1,2 @@
 # Rjira
-JIRA REST API wrapper in R
+Friendly JIRA REST API wrapper in R
