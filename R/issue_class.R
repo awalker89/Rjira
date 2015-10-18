@@ -1,10 +1,4 @@
 
-## Not sure about this
-
-## How this could work
-# we have an issue object
-# eveytime you change something on the issue object a request is sent to change OR 
-# you do what you want and then send it at the send it at the end
 
 
 
@@ -23,7 +17,6 @@ create_issue <- function(){
 
 
 
-
 Issue <- setRefClass(
   
   Class = "Issue",
@@ -32,7 +25,7 @@ Issue <- setRefClass(
     
     project_key = "ANY"
     , project_ID = "ANY"
-    , issue_type = "ANY"
+    , issue_type = "character"
     , summary = "ANY"
     , assignee = "ANY"
     , description = "ANY"    
@@ -42,7 +35,14 @@ Issue <- setRefClass(
   ,methods = list(
     
     initialize = function(){
-      
+     
+      project_key <<- NULL
+      project_ID <<- NULL
+      issue_type <<- "Task"
+      summary <<- NULL
+      assignee <<- NULL
+      description <<- NULL   
+       
     }
     
   )
@@ -60,17 +60,21 @@ Issue$methods(to_issue_list = function(){
   }else{
     stop("project_id and project_key are both NULL")
   }
+
   
+  fields <- list()
+  fields$project <- project_part
+  fields$summary <- summary
   
-  list(
-    fields = list(
-      project = project_part,
-      summary = summary,
-      description = description,
-      issuetype = c(name = issue_type)
-    )
-  )
+  if(!is.null(description))
+    fields$description <- description
   
+  if(!is.null(assignee))
+    fields$assignee <- c(name = assignee)
+  
+  fields$issuetype <- c(name = issue_type)
+  
+  return(list("fields" = fields))
   
   
 })

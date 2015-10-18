@@ -4,6 +4,16 @@
 if(FALSE){
   
   
+  ## Not sure about this
+  
+  ## How this could work
+  # we have an issue object
+  # eveytime you change something on the issue object a request is sent to change OR 
+  # you do what you want and then send it at the send it at the end
+  
+  
+  
+  
   ## EXAMPLE SCRIPT
   
   ## setup
@@ -26,29 +36,28 @@ if(FALSE){
   issue <- create_issue()
   issue$project_key <- "ADM"
   issue$assignee <- "admin"
-  issue$issue_type <- "Bug"
-  issue$summary <- "Testing using reference class objects"
-  issue$description <- "Test description for reference class Issue"
+  issue$issue_type <- "Task"
+  issue$summary <- "Test Assign to admin"
+  issue$description <- "An optional description"
+  
   
   post_issue(issue) ## post the issue to JIRA 
   
-  ## write comment to issue
-  issue_id <- "ADM-1"
-  comment <- "this is a test comment via API 2"
-  add_c
   
+  
+  ## write comment to issue
+  write_comment(issue_id = "ADM-6", comment = "A comment", verbose = )
   
   ## Get a list of projects
   get_projects() ## needt to clean up output from here
   
-  
   ## Get list of issues under a project
   issues <- get_issues(project = "ADM") ## need to parse this to issue objects
   
-  
-  
   ## Get list of issues assigned to user
-  get_issues(user = "bwalker" , project_key = getOption("jira_project"))
+  res <- get_issues(user = "bwalker" , project_key = getOption("jira_project"))
+  sapply(res, "[[", "id")
+  sapply(res, "[[", "key")
   
   
   ## 
@@ -59,8 +68,11 @@ if(FALSE){
 
 #' @name write_comment
 #' @title Comment on an existing issue
-#' @param jira_url base url to jira. Defaults to 'jira/'
-#' @return string
+#' @param jira_url base url to JIRA. Defaults to 'jira/'
+#' @param jira_user username for authentication
+#' @param jira_password password for authentication
+#' @param verbose FALSE
+#' @return POST results
 #' @export
 write_comment <- function(issue_id
                           , comment
@@ -74,12 +86,12 @@ write_comment <- function(issue_id
   url <- paste0(issue_url(jira_url = jira_url), issue_id, "/comment")
   
   x <- list(body = comment)
-
+  
   res <- POST(url = url,
-       body = RJSONIO::toJSON(x),
-       authenticate(user = jira_user, password = jira_password, "basic"),
-       add_headers("Content-Type" = "application/json"),
-       verbose(data_out = verbose, data_in = verbose, info = verbose)
+              body = RJSONIO::toJSON(x),
+              authenticate(user = jira_user, password = jira_password, "basic"),
+              add_headers("Content-Type" = "application/json"),
+              verbose(data_out = verbose, data_in = verbose, info = verbose)
   )
   
   res <- content(res, as = "parsed")
@@ -92,7 +104,14 @@ write_comment <- function(issue_id
 
 
 
-
+#' @name post_issue
+#' @title post issue to JIRA
+#' @param issue An issue object
+#' @param jira_url base url to JIRA. Defaults to 'jira/'
+#' @param jira_user username for authentication
+#' @param jira_password password for authentication
+#' @return POST results
+#' @export
 post_issue <- function(  issue
                          , jira_url = getOption("jira_url")
                          , jira_user = getOption("jira_user")
@@ -111,12 +130,19 @@ post_issue <- function(  issue
   
   x <- issue$to_issue_list()
   
-  POST(url = issue_url(jira_url = jira_url),
-       body = RJSONIO::toJSON(x),
-       authenticate(user = jira_user, password = jira_password, "basic"),
-       add_headers("Content-Type" = "application/json"),
-       verbose(data_out = verbose, data_in = verbose, info = verbose)
+  print(cat(RJSONIO::toJSON(x)))
+  
+  res <- POST(url = issue_url(jira_url = jira_url),
+              body = RJSONIO::toJSON(x),
+              authenticate(user = jira_user, password = jira_password, "basic"),
+              add_headers("Content-Type" = "application/json"),
+              verbose(data_out = verbose, data_in = verbose, info = verbose)
   )
+  
+  
+  res <- content(res, as = "parsed")
+  
+  return(res)
   
 }
 

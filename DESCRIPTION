@@ -6,9 +6,6 @@ Date: 2015-10-18
 Author: Alexander Walker
 Maintainer: Alexander Walker <Alexander.Walker1989@gmail.com>
 Description: Simplifies the use of the JIRA REST API from R
-
-
-
 License: GPL-3
 LazyData: TRUE
 Imports:

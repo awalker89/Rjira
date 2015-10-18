@@ -8,7 +8,7 @@
 #' @param jira_user username for authentication
 #' @param jira_password password for authentication
 #' @param verbose FALSE
-#' @return character vector of issues
+#' @return TODO
 #' @export
 #' @seealso \code{\link{search_url}}
 #' @examples
@@ -60,13 +60,16 @@ get_issues <- function(user = NULL
   if(is.null(jira_password))
     stop("jira_password is NULL")
   
-  url <- paste0(search_url(jira_url = jira_url), sprintf('jql=project="%s"', project))
+  url <- paste0(search_url(jira_url = jira_url), sprintf('jql=project="%s"', project_key))
   if(!is.null(user)){
     url <- paste(url, sprintf('AND assignee="%s"', user))
   }
   
   res <- jira_get(url = url, user = jira_user, password = jira_password, verbose = verbose)
   res <- content(res, as = "parsed")
+  res <- res$issues
+  
+
   
   return(res)
   
