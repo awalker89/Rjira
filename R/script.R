@@ -63,6 +63,15 @@ if(FALSE){
   add_watcher(issue_id = "ADM-1", user = "blance")
   
   
+  ## TODO
+  # clone issue
+  # assign issue to a sprint - create ticket within a sprint / move ticket to sprint
+  # maybe build a dashboard over it to see stats
+  # 
+  
+  
+  
+  
   
 }
 

@@ -15,20 +15,20 @@ create_issue <- function(){
 }
 
 
-
-
 Issue <- setRefClass(
   
   Class = "Issue",
   
   fields = list(
     
-    project_key = "ANY"
-    , project_ID = "ANY"
+    project_key = "character"
+    , project_ID = "integer"
     , issue_type = "character"
-    , summary = "ANY"
-    , assignee = "ANY"
-    , description = "ANY"    
+    , summary = "character"
+    , assignee = "character"
+    , reporter = "character"
+    , description = "character"
+    , duedate = "Date"
     
   )
   
@@ -36,13 +36,15 @@ Issue <- setRefClass(
     
     initialize = function(){
      
-      project_key <<- NULL
-      project_ID <<- NULL
+      project_key <<- as.character(NA)
+      project_ID <<- as.character(NA)
       issue_type <<- "Task"
-      summary <<- NULL
-      assignee <<- NULL
-      description <<- NULL   
-       
+      summary <<- as.character(NA)
+      assignee <<- as.character(NA)
+      reporter <<- as.character(NA)
+      description <<- as.character(NA)
+      duedate <<- as.Date(NA)   
+      
     }
     
   )
@@ -65,14 +67,20 @@ Issue$methods(to_issue_list = function(){
   fields <- list()
   fields$project <- project_part
   fields$summary <- summary
+  fields$issuetype <- c(name = issue_type)
   
-  if(!is.null(description))
+  if(!is.na(description))
     fields$description <- description
   
-  if(!is.null(assignee))
+  if(!is.na(assignee))
     fields$assignee <- c(name = assignee)
   
-  fields$issuetype <- c(name = issue_type)
+  if(!is.na(reporter))
+    fields$reporter <- c(name = reporter)
+  
+  if(!is.na(duedate))
+    fields$duedate <- format(duedate, "%Y-%m-%d")
+
   
   return(list("fields" = fields))
   
