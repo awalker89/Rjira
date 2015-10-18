@@ -66,8 +66,13 @@ if(FALSE){
   ## TODO
   # clone issue
   # assign issue to a sprint - create ticket within a sprint / move ticket to sprint
+  # assign existing issue to someone else
+  # remove_watchers
+  # get_watchers
   # maybe build a dashboard over it to see stats
-  # 
+  # get issue comments -- GET /rest/api/2/issue/{issueIdOrKey}/comment
+  # JQL query function to find issues
+  # data.frame to comment - writing data.frames to JIRA markup tables would be super handy
   
   
   
