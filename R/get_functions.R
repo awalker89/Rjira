@@ -33,8 +33,6 @@ get_projects <- function(jira_url = getOption("jira_url")
 
 
 
-
-
 #' @name get_user_issues
 #' @title Get issues assigned to a user
 #' @param user user to search for
@@ -46,14 +44,15 @@ get_projects <- function(jira_url = getOption("jira_url")
 #' @seealso \code{\link{search_url}}
 #' @examples
 #' get_user_issues(user = "billy")
-get_user_issues <- function(user
-                            , jira_url = getOption("jira_url")
-                            , jira_user = getOption("jira_user")
-                            , jira_password = getOption("jira_password")){
+get_issues <- function(user = NULL
+                       , project_key = getOption("jira_project")
+                       , jira_url = getOption("jira_url")
+                       , jira_user = getOption("jira_user")
+                       , jira_password = getOption("jira_password")
+                       , verbose = getOption("jira_verbose")){
   
   if(is.null(jira_url))
     stop('jira_url is NULL. See getOption("jira_url")')
-  
   
   if(is.null(jira_user))
     stop("jira_user is NULL")
@@ -61,20 +60,13 @@ get_user_issues <- function(user
   if(is.null(jira_password))
     stop("jira_password is NULL")
   
+  url <- paste0(search_url(jira_url = jira_url), sprintf('jql=project="%s"', project))
+  if(!is.null(user)){
+    url <- paste(url, sprintf('AND assignee="%s"', user))
+  }
   
-  x <- list(
-    fields = list(
-      project = c(key = "ADM"),
-      summary = "2 The quick brown fox jumped over the lazy dog",
-      description = "silly old billy",
-      issuetype = c(name = "Task")
-    )
-  )
-  
-  
-  url <- paste0(search_url(jira_url = jira_url), "jql=assignee=", user)
-  
-  jira_post(x = x, url = url, password = password, verbose = verbose)
+  res <- jira_get(url = url, user = jira_user, password = jira_password, verbose = verbose)
+  res <- content(res, as = "parsed")
   
 }
 
