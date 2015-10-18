@@ -59,28 +59,78 @@ if(FALSE){
   sapply(res, "[[", "id")
   sapply(res, "[[", "key")
   
+  ## add a watcher to an existing ticket
+  add_watcher(issue_id = "ADM-1", user = "blance")
   
-  ## 
   
   
 }
 
 
-#' @name write_comment
-#' @title Comment on an existing issue
+
+#' @name add_watcher
+#' @title Add a watched to an existing issue
 #' @param jira_url base url to JIRA. Defaults to 'jira/'
 #' @param jira_user username for authentication
 #' @param jira_password password for authentication
 #' @param verbose FALSE
 #' @return POST results
 #' @export
-write_comment <- function(issue_id
-                          , comment
-                          , jira_url = getOption("jira_url")
-                          , jira_user = getOption("jira_user")
-                          , jira_password = getOption("jira_password")
-                          , verbose = getOption("jira_verbose")
+add_watcher <- function(issue_id
+                        , user
+                        , jira_url = getOption("jira_url")
+                        , jira_user = getOption("jira_user")
+                        , jira_password = getOption("jira_password")
+                        , verbose = getOption("jira_verbose")
 ){
+  
+  
+  if(length(user) != 1)
+    stop("user must have length 1.")
+  
+  url <- paste0(issue_url(jira_url = jira_url), issue_id, "/watchers")
+  
+  res <- POST(url = url,
+              body = shQuote(user),
+              authenticate(user = jira_user, password = jira_password, "basic"),
+              add_headers("Content-Type" = "application/json"),
+              verbose(data_out = verbose, data_in = verbose, info = verbose)
+  )
+  
+  res <- content(res, as = "parsed")
+  
+  
+  # Responses
+  # STATUS 204: Returned if the watcher was added successfully.
+  # STATUS 400: Returned if there is a problem with the received user representation.
+  # STATUS 401: Returned if the calling user does not have permission to add the watcher to the issue's list of watchers.
+  # STATUS 404: Returned if either the issue or the user does not exist.
+
+  
+}
+
+
+
+#' @name add_comment
+#' @title Comment on an existing issue
+#' @param issue_id An existsing issue key.
+#' @param comment string
+#' @param jira_url base url to JIRA. Defaults to 'jira/'
+#' @param jira_user username for authentication
+#' @param jira_password password for authentication
+#' @param verbose FALSE
+#' @return POST results
+#' @export
+add_comment <- function(issue_id
+                        , comment
+                        , jira_url = getOption("jira_url")
+                        , jira_user = getOption("jira_user")
+                        , jira_password = getOption("jira_password")
+                        , verbose = getOption("jira_verbose")
+){
+  
+  if(length(comment) != 1)
+    stop("comment must have length 1.")
   
   
   url <- paste0(issue_url(jira_url = jira_url), issue_id, "/comment")
