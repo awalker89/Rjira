@@ -40,10 +40,10 @@ if(FALSE){
   get_projects() ## clean up output from here
   
   ## Get list of issues under a project
-  get_issues()
+  get_issues(project = "ADM")
   
   ## Get list of issues assigned to user
-  
+  get_issues(user = "bwalker" , project_key = getOption("jira_project"))
   
   
   
@@ -74,7 +74,7 @@ post_issue <- function(  issue
   if(is.null(jira_password)) stop("jira_user is jira_password")
   
   
-  x <- issue$to_project_list()
+  x <- issue$to_issue_list()
   
   POST(url = issue_url(jira_url = jira_url),
        body = RJSONIO::toJSON(x),

@@ -33,7 +33,7 @@ get_projects <- function(jira_url = getOption("jira_url")
 
 
 
-#' @name get_user_issues
+#' @name get_issues
 #' @title Get issues assigned to a user
 #' @param user user to search for
 #' @param jira_url base JIRA url
@@ -43,7 +43,7 @@ get_projects <- function(jira_url = getOption("jira_url")
 #' @export
 #' @seealso \code{\link{search_url}}
 #' @examples
-#' get_user_issues(user = "billy")
+#' get_issues(user = "admin")
 get_issues <- function(user = NULL
                        , project_key = getOption("jira_project")
                        , jira_url = getOption("jira_url")
@@ -67,6 +67,8 @@ get_issues <- function(user = NULL
   
   res <- jira_get(url = url, user = jira_user, password = jira_password, verbose = verbose)
   res <- content(res, as = "parsed")
+  
+  return(res)
   
 }
 

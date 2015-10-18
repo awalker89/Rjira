@@ -3,7 +3,8 @@
 
 ## How this could work
 # we have an issue object
-# eveytime you change something on the issue object a request is sent to change OR you do what you want and then send it at the send it at the end
+# eveytime you change something on the issue object a request is sent to change OR 
+# you do what you want and then send it at the send it at the end
 
 
 
@@ -34,7 +35,8 @@ Issue <- setRefClass(
   
 )
 
-Issue$methods(to_project_list = function(){
+
+Issue$methods(to_issue_list = function(){
   
   
   if(!is.null(project_key)){
@@ -58,9 +60,6 @@ Issue$methods(to_project_list = function(){
   
   
 })
-
-
-
 
 
 
