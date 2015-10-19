@@ -96,3 +96,91 @@ Issue$methods(to_issue_list = function(){
 # })
 
 
+
+
+#' @name post_issue
+#' @title post issue to JIRA
+#' @param issue An issue object
+#' @param jira_url base url to JIRA. Defaults to 'jira/'
+#' @param jira_user username for authentication
+#' @param jira_password password for authentication
+#' @return POST results
+#' @export
+post_issue <- function(  issue
+                         , jira_url = getOption("jira_url")
+                         , jira_user = getOption("jira_user")
+                         , jira_password = getOption("jira_password")
+                         , verbose = getOption("jira_verbose")
+){
+  
+  ## input checking
+  if(!"Issue" %in% class(issue))
+    stop("issue must be an Issue Object.")
+  
+  if(is.null(jira_url)) stop("jira_url is NULL")
+  if(is.null(jira_user)) stop("jira_user is NULL")
+  if(is.null(jira_password)) stop("jira_user is jira_password")
+  
+  
+  x <- issue$to_issue_list()
+  
+  print(cat(RJSONIO::toJSON(x)))
+  
+  res <- POST(url = issue_url(jira_url = jira_url),
+              body = RJSONIO::toJSON(x),
+              authenticate(user = jira_user, password = jira_password, "basic"),
+              add_headers("Content-Type" = "application/json"),
+              verbose(data_out = verbose, data_in = verbose, info = verbose)
+  )
+  
+  
+  res <- content(res, as = "parsed")
+  
+  return(res)
+  
+}
+
+
+
+
+#' @name assign_user
+#' @title Assign a user to an issue
+#' @param issue An existing issue id or key.
+#' @param jira_url base url to JIRA. Defaults to 'jira/'
+#' @param jira_user username for authentication
+#' @param jira_password password for authentication
+#' @param verbose FALSE
+#' @return POST results
+#' @export
+assign_user <- function(issue
+                        , user
+                        , jira_url = getOption("jira_url")
+                        , jira_user = getOption("jira_user")
+                        , jira_password = getOption("jira_password")
+                        , verbose = getOption("jira_verbose")
+){
+  
+  if(length(issue) != 1)
+    stop("issue must have length 1.")
+  
+  if(length(user) != 1)
+    stop("user must have length 1.")
+  
+  url <- paste0(issue_url(jira_url = jira_url), issue, "/assignee")
+  
+  res <- PUT(url = url,
+             body = RJSONIO::toJSON(c("name" = user)),
+             authenticate(user = jira_user, password = jira_password, "basic"),
+             add_headers("Content-Type" = "application/json"),
+             verbose(data_out = verbose, data_in = verbose, info = verbose)
+  )
+  
+  res <- content(res, as = "parsed")
+  
+  return(res)
+  
+}
+
+
+
+
