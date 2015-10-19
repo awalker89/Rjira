@@ -87,21 +87,24 @@ if(FALSE){
   
   ## Assign User
   assign_user(issue = "10000", user = "blance", verbose = TRUE)
-
-  
-  
-  get_assignee(issue = "10000")
+  get_assignee(issue = "ADM-1")
   
   
   ## TODO
-  # clone issue
+  # clone issue **** these is a button to do this on the UI.
+  # get_assignee()
   # assign issue to a sprint - create ticket within a sprint / move ticket to sprint
-
-  # maybe build a dashboard over it to see stats
+  # remove_comment()
+  # get_comments()
+  
+  
   # get issue comments -- GET /rest/api/2/issue/{issueIdOrKey}/comment
   # JQL query function to find issues
-  # get_assignee()
-
+ 
+  # maybe build a dashboard over it to see stats
+  
+  
+  
   
   
   
@@ -116,49 +119,6 @@ if(FALSE){
 }
 
 
-
-#' @name add_watcher
-#' @title Add a watched to an existing issue
-#' @param jira_url base url to JIRA. Defaults to 'jira/'
-#' @param jira_user username for authentication
-#' @param jira_password password for authentication
-#' @param verbose FALSE
-#' @return POST results
-#' @seealso \code{\link{remove_watcher}}
-#' @seealso \code{\link{get_watchers}}
-#' @export
-add_watcher <- function(issue
-                        , user
-                        , jira_url = getOption("jira_url")
-                        , jira_user = getOption("jira_user")
-                        , jira_password = getOption("jira_password")
-                        , verbose = getOption("jira_verbose")
-){
-  
-  
-  if(length(user) != 1)
-    stop("user must have length 1.")
-  
-  url <- paste0(issue_url(jira_url = jira_url), issue, "/watchers")
-  
-  res <- POST(url = url,
-              body = shQuote(user),
-              authenticate(user = jira_user, password = jira_password, "basic"),
-              add_headers("Content-Type" = "application/json"),
-              verbose(data_out = verbose, data_in = verbose, info = verbose)
-  )
-  
-  res <- content(res, as = "parsed")
-  
-  
-  # Responses
-  # STATUS 204: Returned if the watcher was added successfully.
-  # STATUS 400: Returned if there is a problem with the received user representation.
-  # STATUS 401: Returned if the calling user does not have permission to add the watcher to the issue's list of watchers.
-  # STATUS 404: Returned if either the issue or the user does not exist.
-
-  
-}
 
 
 
@@ -196,147 +156,13 @@ assign_user <- function(issue
   
   res <- content(res, as = "parsed")
   
-  
-  
-}
-
-
-
-
-#' @name remove_watcher
-#' @title Remove a watched to an existing issue
-#' @param jira_url base url to JIRA. Defaults to 'jira/'
-#' @param jira_user username for authentication
-#' @param jira_password password for authentication
-#' @param verbose FALSE
-#' @return DELETE results
-#' @seealso \code{\link{add_watcher}}
-#' @seealso \code{\link{get_watchers}}
-#' @export
-remove_watcher <- function(issue
-                        , user
-                        , jira_url = getOption("jira_url")
-                        , jira_user = getOption("jira_user")
-                        , jira_password = getOption("jira_password")
-                        , verbose = getOption("jira_verbose")
-){
-  
-  
-  if(length(user) != 1)
-    stop("user must have length 1.")
-  
-  if(length(issue) != 1)
-    stop("issue must have length 1.")
-  
-  url <- paste0(issue_url(jira_url = jira_url), issue, "/watchers")
-  
-  res <- DELETE(url = url,
-              body = shQuote(user),
-              authenticate(user = jira_user, password = jira_password, "basic"),
-              add_headers("Content-Type" = "application/json"),
-              verbose(data_out = verbose, data_in = verbose, info = verbose)
-  )
-  
-  res <- content(res, as = "parsed")
-  
-}
-
-
-
-#' @name get_watchers
-#' @title Get a list of watchers on an existing issue
-#' @param jira_url base url to JIRA. Defaults to 'jira/'
-#' @param jira_user username for authentication
-#' @param jira_password password for authentication
-#' @param verbose FALSE
-#' @return DELETE results
-#' @seealso \code{\link{add_watcher}}
-#' @seealso \code{\link{remove_watcher}}
-#' @export
-get_watchers <- function(issue
-                           , jira_url = getOption("jira_url")
-                           , jira_user = getOption("jira_user")
-                           , jira_password = getOption("jira_password")
-                           , verbose = getOption("jira_verbose")
-){
-  
-  
-  if(length(issue) != 1)
-    stop("issue must have length 1.")
-  
-  url <- paste0(issue_url(jira_url = jira_url), issue, "/watchers")
-  
-  res <- GET(url = url,
-                authenticate(user = jira_user, password = jira_password, "basic"),
-                add_headers("Content-Type" = "application/json"),
-                verbose(data_out = verbose, data_in = verbose, info = verbose)
-  )
-  
-
-  res <- content(res, as = "parsed")
-  
-  return(res$watchers)
-  
-}
-
-
-
-
-
-
-
-#' @name add_comment
-#' @title Comment on an existing issue
-#' @param issue An existing issue id or key.
-#' @param comment Charactervector, list or data.frame. See examples.
-#' @param jira_url base url to JIRA. Defaults to 'jira/'
-#' @param jira_user username for authentication
-#' @param jira_password password for authentication
-#' @param verbose FALSE
-#' @return POST results
-#' @export
-add_comment <- function(issue
-                        , comment
-                        , jira_url = getOption("jira_url")
-                        , jira_user = getOption("jira_user")
-                        , jira_password = getOption("jira_password")
-                        , verbose = getOption("jira_verbose")
-){
-  
-  if(length(comment) == 0)
-    stop("comment must have length > 0")
-  
-  if(length(comment) > 1){
-    comment_classes <- lapply(comment, class)
-    
-    df_inds <- sapply(comment_classes, function(cl) "data.frame" %in% cl)
-    
-    if(any(df_inds))
-      comment[df_inds] <- sapply(comment[df_inds], df_to_jira_table)
-    
-    comment <- paste(comment, collapse = "\n", sep = "\n")
-    
-  }
-  
-  if(length(issue) != 1)
-    stop("issue must have length 1.")
-  
-  url <- paste0(issue_url(jira_url = jira_url), issue, "/comment")
-  
-  x <- list(body = comment)
-  
-  res <- POST(url = url,
-              body = RJSONIO::toJSON(x),
-              authenticate(user = jira_user, password = jira_password, "basic"),
-              add_headers("Content-Type" = "application/json"),
-              verbose(data_out = verbose, data_in = verbose, info = verbose)
-  )
-  
-  res <- content(res, as = "parsed")
-  
   return(res)
   
 }
+
+
+
+
 
 
 

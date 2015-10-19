@@ -1,23 +1,6 @@
 
 
 
-#' @name df_to_jira_table
-#' @title Convert data.frame to JIRA markup table
-#' @param x a data.frame
-#' @return string
-#' @export
-#' @examples
-#'cat( df_to_jira_table(head(iris)))
-df_to_jira_table <- function(x){
-  
-  x <- as.data.frame(x)
-  nms <- paste0("||", paste(names(x), collapse = "||"), "||")
-  body <- unname(apply(x, MARGIN = 1, FUN = function(x) paste0("|", paste(x, collapse = "|"), "|")))
-  body <- paste(nms, paste(body, collapse = "\n"), sep = "\n")
-  
-  return(body)
-  
-}
 
 
 
