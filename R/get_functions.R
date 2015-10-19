@@ -36,6 +36,7 @@ get_projects <- function(jira_url = getOption("jira_url")
 #' @name get_issues
 #' @title Get issues assigned to a user
 #' @param user user to search for
+#' @param issue An existing issue id or key.
 #' @param jira_url base JIRA url
 #' @param jira_user username for authentication
 #' @param jira_password password for authentication
@@ -45,6 +46,7 @@ get_projects <- function(jira_url = getOption("jira_url")
 #' @examples
 #' get_issues(user = "admin")
 get_issues <- function(user = NULL
+                       , issue
                        , project_key = getOption("jira_project")
                        , jira_url = getOption("jira_url")
                        , jira_user = getOption("jira_user")

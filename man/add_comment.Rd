@@ -4,15 +4,15 @@
 \alias{add_comment}
 \title{Comment on an existing issue}
 \usage{
-add_comment(issue_id, comment, jira_url = getOption("jira_url"),
+add_comment(issue, comment, jira_url = getOption("jira_url"),
   jira_user = getOption("jira_user"),
   jira_password = getOption("jira_password"),
   verbose = getOption("jira_verbose"))
 }
 \arguments{
-\item{issue_id}{An existsing issue key.}
+\item{issue}{An existing issue id or key.}
 
-\item{comment}{string}
+\item{comment}{Charactervector, list or data.frame. See examples.}
 
 \item{jira_url}{base url to JIRA. Defaults to 'jira/'}
 

@@ -9,7 +9,7 @@
 
   )
 
-  for (i in names(opts)){#setdiff(names(opts),names(options()))){  ## makes sure we don't overwrite existing options
+  for (i in setdiff(names(opts),names(options()))){  ## makes sure we don't overwrite existing options
     # print(paste("options(",i,"=",opts[i],")",sep=""))
     eval(parse(text=paste("options(",i,"=",opts[i],")",sep="")))
 }

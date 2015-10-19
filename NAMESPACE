@@ -2,9 +2,13 @@
 
 export(add_comment)
 export(add_watcher)
+export(assign_user)
 export(create_issue)
+export(df_to_jira_table)
 export(get_issues)
 export(get_projects)
+export(get_watchers)
 export(issue_url)
 export(post_issue)
+export(remove_watcher)
 export(search_url)

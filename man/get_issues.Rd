@@ -4,13 +4,15 @@
 \alias{get_issues}
 \title{Get issues assigned to a user}
 \usage{
-get_issues(user = NULL, project_key = getOption("jira_project"),
+get_issues(user = NULL, issue, project_key = getOption("jira_project"),
   jira_url = getOption("jira_url"), jira_user = getOption("jira_user"),
   jira_password = getOption("jira_password"),
   verbose = getOption("jira_verbose"))
 }
 \arguments{
 \item{user}{user to search for}
+
+\item{issue}{An existing issue id or key.}
 
 \item{jira_url}{base JIRA url}
 
