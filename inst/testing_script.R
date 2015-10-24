@@ -13,8 +13,6 @@ if(FALSE){
   # you do what you want and then send it at the send it at the end
   
   
-  
-  
   ## EXAMPLE SCRIPT
   
   ## setup
@@ -43,20 +41,27 @@ if(FALSE){
   post_issue(issue) ## post the issue to JIRA 
   
   
-  ## write comment to issue
-  add_comment(issue = "ADM-6", comment = "A comment", verbose = )
   
+  options("jira_user" = "admin") ## my username is admin
+  options("jira_password" = "xxxx")
+  options("jira_url" = "jira/")
+  options("jira_project" = "BAS")
+  
+  ## write comment to issue
+  add_comment(issue = "BAS-1", comment = "A comment")
   
   my_comment <- "
-  I need to do this
-  * get_comments()
-  ** delete_comment()
-  * add_comment()
+    Bullet points example
+    * point 1
+    ** point 1.1
+    * point 2
   "
-  add_comment(issue = "ADM-1", comment = my_comment, verbose = TRUE) ## formatting works
+  add_comment(issue = "BAS-1", comment = my_comment) ## formatting works
   
+  
+  ## write a data.frame as a table
   my_results_comment <- list("The results of this analysis:", head(iris, 4))
-  add_comment(issue = "ADM-1", comment = my_results_comment, verbose = TRUE) ## formatting works
+  add_comment(issue = "BAS-1", comment = my_results_comment) ## formatting works
   
   
   
@@ -77,17 +82,24 @@ if(FALSE){
   
   ### WATCHERS
   ## add a watcher to an existing ticket
-  add_watcher(issue = "ADM-1", user = "blance")
-  get_watchers(issue = "ADM-1", user = "blance")
+  add_watcher(issue = "ADM-1", user = "admin")
+  get_watchers(issue = "ADM-1")
   remove_watcher(issue = "ADM-1", user = "blance")
   
   get_watchers(issue = "ADM-1")
   get_watchers(issue = "10000")
   
   
+  res <- get_comments(issue = "ADM-1")
+  res[[1]]
+  
+  
+  
+  names(res)
+  
   
   ## Assign User
-  assign_user(issue = "10000", user = "blance", verbose = TRUE)
+  assign_user(issue = "10000", user = "admin", verbose = TRUE)
   get_assignee(issue = "ADM-1")
   
   

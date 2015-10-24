@@ -1,13 +1,13 @@
 Package: jira
 Type: Package
 Title: Jira API wrapper for R
-Version: 0.1
-Date: 2015-10-18
+Version: 0.1.1
+Date: 2015-10-24
 Author: Alexander Walker
 Maintainer: Alexander Walker <Alexander.Walker1989@gmail.com>
 Description: Simplifies the use of the JIRA REST API from R
 License: GPL-3
 LazyData: TRUE
-Imports:
+Depends:
     httr
    ,RJSONIO
