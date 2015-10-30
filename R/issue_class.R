@@ -37,7 +37,7 @@ Issue <- setRefClass(
     initialize = function(){
      
       project_key <<- as.character(NA)
-      project_ID <<- as.character(NA)
+      project_ID <<- as.integer(NA)
       issue_type <<- "Task"
       summary <<- as.character(NA)
       assignee <<- as.character(NA)
