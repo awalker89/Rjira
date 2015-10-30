@@ -27,7 +27,7 @@ Issue <- setRefClass(
     , summary = "character"
     , assignee = "character"
     , reporter = "character"
-    , description = "character"
+    , description = "ANY"
     , duedate = "Date"
     , components = "character"
     , custom_fields = "list"
@@ -44,7 +44,7 @@ Issue <- setRefClass(
       summary <<- as.character(NA)
       assignee <<- as.character(NA)
       reporter <<- as.character(NA)
-      description <<- as.character(NA)
+      description <<- NULL
       duedate <<- as.Date(NA)  
       components <<- as.character(NA)
       custom_fields <<- list()
@@ -73,9 +73,23 @@ Issue$methods(to_issue_list = function(){
   fields$summary <- summary
   fields$issuetype <- c(name = issue_type)
   
-  if(!is.na(description))
-    fields$description <- description
+
+  if(!is.null(description)){
+    
+    if(is.list(description)){
+      
+      desc_classes <- lapply(description, class)
+      df_inds <- sapply(desc_classes, function(cl) "data.frame" %in% cl)
+      if(any(df_inds))
+        description[df_inds] <- sapply(description[df_inds], df_to_jira_table)
+
+    }   
+    
+    fields$description <- paste(description, collapse = "\n", sep = "\n")
+    
+  }
   
+
   if(!is.na(assignee))
     fields$assignee <- c(name = assignee)
   
