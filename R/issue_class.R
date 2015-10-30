@@ -29,6 +29,8 @@ Issue <- setRefClass(
     , reporter = "character"
     , description = "character"
     , duedate = "Date"
+    , components = "character"
+    , custom_fields = "list"
     
   )
   
@@ -43,7 +45,9 @@ Issue <- setRefClass(
       assignee <<- as.character(NA)
       reporter <<- as.character(NA)
       description <<- as.character(NA)
-      duedate <<- as.Date(NA)   
+      duedate <<- as.Date(NA)  
+      components <<- as.character(NA)
+      custom_fields <<- list()
       
     }
     
@@ -80,6 +84,16 @@ Issue$methods(to_issue_list = function(){
   
   if(!is.na(duedate))
     fields$duedate <- format(duedate, "%Y-%m-%d")
+  
+  if(!is.na(components))
+    fields$components <- lapply(components, function(comp) c(name = comp))
+  
+  if(length(custom_fields) > 0){
+    for(i in 1:length(custom_fields))
+      fields[[names(custom_fields)[i]]] <- custom_fields[[i]]
+
+  }
+    
 
   
   return(list("fields" = fields))
