@@ -33,11 +33,6 @@ if(FALSE){
   
   devtools::install_github("awalker89/Rjira")
   
-  options("jira_user" = "alwalker") ## my username is admin
-  options("jira_password" = "alex1")
-  options("jira_url" = "jira")
-  options("jira_project" = "ADM")
-  
 
   issue <- create_issue()
   issue$project_key <- "ADM"
