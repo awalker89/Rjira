@@ -32,10 +32,10 @@ Comment on an existing issue
 \dontrun{
 
 ## set options
- options("jira_user" = "admin") ## my username is admin
- options("jira_password" = "xxxx")
- options("jira_url" = "jira/")
- options("jira_project" = "BAS")
+options("jira_user" = "admin") ## my username is admin
+options("jira_password" = "xxxx")
+options("jira_url" = "jira/")
+options("jira_project" = "BAS")
 
 ## write comment to issue
 add_comment(issue = "BAS-1", comment = "A comment")

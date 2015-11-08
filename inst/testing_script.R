@@ -16,9 +16,9 @@ if(FALSE){
   ## EXAMPLE SCRIPT
   
   ## setup
-  options("jira_user" = "admin") ## my username is admin
+  options("jira_user" = "alwalker") ## my username is admin
   options("jira_password" = "alex1")
-  options("jira_url" = "https://rwrapper.atlassian.net")
+  options("jira_url" = "jira")
   options("jira_project" = "ADM")
   
   #### -------------------------------------------
@@ -31,14 +31,27 @@ if(FALSE){
   #### -------------------------------------------
   
   
-  ## create a new issue object in R
+  devtools::install_github("awalker89/Rjira")
+  
+  options("jira_user" = "alwalker") ## my username is admin
+  options("jira_password" = "alex1")
+  options("jira_url" = "jira")
+  options("jira_project" = "ADM")
+  
+
   issue <- create_issue()
   issue$project_key <- "ADM"
-  issue$assignee <- "admin"
+  issue$assignee <- "alwalker"
   issue$issue_type <- "Task"
-  issue$summary <- "Test Assign to admin"
-  issue$description <- "An optional description"
+  issue$summary <- "TEST 3"
+  issue$description <- list("This look concerning", head(iris, 4))
+  issue$components <- "New AVM"
+  issue$custom_fields <- list("customfield_11131" = "ADM-283", ## EPIC LINK
+                              "customfield_11130" = "115") ## SPRINT ID
+  
   post_issue(issue) ## post the issue to JIRA 
+  
+  
   
   
   
@@ -66,13 +79,14 @@ if(FALSE){
   
   
   
+
   
   
   ## Get a list of projects
   get_projects() ## needt to clean up output from here
   
   ## Get list of issues under a project
-  issues <- get_issues(project = "ADM") ## need to parse this to issue objects
+  issues <- get_issues(project = "ADM", issue = "ADM-323") ## need to parse this to issue objects
   
   ## Get list of issues assigned to user
   res <- get_issues(user = "bwalker" , project_key = getOption("jira_project"))
