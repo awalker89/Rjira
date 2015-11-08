@@ -16,10 +16,20 @@ if(FALSE){
   ## EXAMPLE SCRIPT
   
   ## setup
-  options("jira_user" = "alwalker") ## my username is admin
+  options("jira_user" = "admin") ## my username is admin
   options("jira_password" = "alex1")
-  options("jira_url" = "jira")
+  options("jira_url" = "https://rwrapper.atlassian.net")
   options("jira_project" = "ADM")
+  
+  
+  ## Get list of issues assigned to user
+  res <- get_issues(user = "admin", project_key = NULL)
+  sapply(res, "[[", "id")
+  sapply(res, "[[", "key")
+  
+  
+  
+  
   
   #### -------------------------------------------
   ## Testing variables
@@ -39,7 +49,7 @@ if(FALSE){
   issue$assignee <- "alwalker"
   issue$issue_type <- "Task"
   issue$summary <- "TEST 3"
-  issue$description <- list("This look concerning", head(iris, 4))
+  issue$description <- list("This look concerning", head(iris, 4), "Better look into it.")
   issue$components <- "New AVM"
   issue$custom_fields <- list("customfield_11131" = "ADM-283", ## EPIC LINK
                               "customfield_11130" = "115") ## SPRINT ID
@@ -47,10 +57,26 @@ if(FALSE){
   post_issue(issue) ## post the issue to JIRA 
   
   
+
+  # GET /rest/api/2/issue/{issueIdOrKey}/transitions
+  issue <- "ADM-1"
+  
+  url <- sprintf("%s/rest/api/latest/issue/%s/transitions", jira_url, issue)
+  user <- "alwalker"
+  password <- "alex1"
+  
+  res <- GET(url = url,
+      authenticate(user = user, password = password, "basic"),
+      add_headers("Content-Type" = "application/json"),
+      verbose(data_out = verbose, data_in = verbose, info = verbose)
+  )
+  
+  content(res, as = "parsed")
+  
+
   
   
-  
-  options("jira_user" = "admin") ## my username is admin
+  options("jira_user" = "my_user_name") ## my username is admin
   options("jira_password" = "xxxx")
   options("jira_url" = "jira/")
   options("jira_project" = "BAS")
@@ -81,13 +107,9 @@ if(FALSE){
   get_projects() ## needt to clean up output from here
   
   ## Get list of issues under a project
-  issues <- get_issues(project = "ADM", issue = "ADM-323") ## need to parse this to issue objects
+  issues <- get_issues(user = "ADM", issue = "ADM-6") ## need to parse this to issue objects
   
-  ## Get list of issues assigned to user
-  res <- get_issues(user = "bwalker" , project_key = getOption("jira_project"))
-  sapply(res, "[[", "id")
-  sapply(res, "[[", "key")
-  
+
   
   ### WATCHERS
   ## add a watcher to an existing ticket
@@ -117,17 +139,11 @@ if(FALSE){
   # get_assignee()
   # assign issue to a sprint - create ticket within a sprint / move ticket to sprint
   # remove_comment()
-  # get_comments()
-  
-  
+
   # get issue comments -- GET /rest/api/2/issue/{issueIdOrKey}/comment
   # JQL query function to find issues
   
   # maybe build a dashboard over it to see stats
-  
-  
-  
-  
   
   
   ## DONE
@@ -136,6 +152,7 @@ if(FALSE){
   # get_watchers()
   # comment formatting and add tables - data.frame to comment - writing data.frames to JIRA markup tables would be super handy
   # assign existing issue to someone else: assign_issue()
+  # get_comments()
   
   
 }

@@ -24,6 +24,11 @@ POST results
 \description{
 Add a watched to an existing issue
 }
+\examples{
+\dontrun{
+ add_watcher(issue = "BAS-1", user = "admin")
+}
+}
 \seealso{
 \code{\link{remove_watcher}}
 

@@ -24,6 +24,11 @@ DELETE results
 \description{
 Remove a watched to an existing issue
 }
+\examples{
+\dontrun{
+   remove_watcher(issue = "BAS-1", user = "admin")
+}
+}
 \seealso{
 \code{\link{add_watcher}}
 

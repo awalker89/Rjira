@@ -13,6 +13,27 @@ Issue object
 Create an Issue object
 }
 \examples{
+\dontrun{
+
+options("jira_user" = "my_user_name") ## my username is admin
+options("jira_password" = "xxxx")
+options("jira_url" = "jira/")
+options("jira_project" = "BAS")
+
+
 create_issue()
+issue$project_key <- "BAS"
+issue$assignee <- "my_assignee"
+issue$issue_type <- "Task"
+issue$summary <- "TEST 1"
+issue$description <- list("This look concerning", head(iris, 4))
+issue$components <- "Some existing component"
+issue$custom_fields <- list("customfield_11131" = "ADM-283", ## Link to EPIC
+                            "customfield_11130" = "115")
+
+
+  post_issue(issue) ## post to JIRA using options()
+
+}
 }
 

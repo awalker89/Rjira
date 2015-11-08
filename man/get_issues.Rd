@@ -4,15 +4,13 @@
 \alias{get_issues}
 \title{Get issues assigned to a user}
 \usage{
-get_issues(user = NULL, issue, project_key = getOption("jira_project"),
+get_issues(user = NULL, project_key = getOption("jira_project"),
   jira_url = getOption("jira_url"), jira_user = getOption("jira_user"),
   jira_password = getOption("jira_password"),
   verbose = getOption("jira_verbose"))
 }
 \arguments{
 \item{user}{user to search for}
-
-\item{issue}{An existing issue id or key.}
 
 \item{jira_url}{base JIRA url}
 
@@ -27,7 +25,21 @@ character vector of issues
 Get issues assigned to a user
 }
 \examples{
+\dontrun{
+
 get_issues(user = "admin")
+
+issues <- get_issues(project = "ADM", issue = "ADM-6", verbose = T)
+
+## Get list of issues assigned to user
+res <- get_issues(user = "admin" , project_key = getOption("jira_project"))
+sapply(res, "[[", "id")
+sapply(res, "[[", "key")
+
+## All projects
+res <- get_issues(user = "admin" , project_key = NULL)
+
+}
 }
 \seealso{
 \code{\link{search_url}}

@@ -24,6 +24,11 @@ DELETE results
 \description{
 Get a list of watchers on an existing issue
 }
+\examples{
+\dontrun{
+   get_watchers(issue = "BAS-1")
+}
+}
 \seealso{
 \code{\link{add_watcher}}
 

@@ -14,6 +14,12 @@
 #' @seealso \code{\link{remove_watcher}}
 #' @seealso \code{\link{get_watchers}}
 #' @export
+#' @examples
+#'
+#' \dontrun{
+#'  add_watcher(issue = "BAS-1", user = "admin")
+#' }
+#' 
 add_watcher <- function(issue
                         , user
                         , jira_url = getOption("jira_url")
@@ -62,6 +68,12 @@ add_watcher <- function(issue
 #' @seealso \code{\link{add_watcher}}
 #' @seealso \code{\link{get_watchers}}
 #' @export
+#' @examples 
+#'
+#' \dontrun{
+#'    remove_watcher(issue = "BAS-1", user = "admin")
+#' }
+#' 
 remove_watcher <- function(issue
                            , user
                            , jira_url = getOption("jira_url")
@@ -102,6 +114,12 @@ remove_watcher <- function(issue
 #' @seealso \code{\link{add_watcher}}
 #' @seealso \code{\link{remove_watcher}}
 #' @export
+#' @examples 
+#'
+#' \dontrun{
+#'    get_watchers(issue = "BAS-1")
+#' }
+#' 
 get_watchers <- function(issue
                          , jira_url = getOption("jira_url")
                          , jira_user = getOption("jira_user")

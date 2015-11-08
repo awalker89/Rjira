@@ -32,7 +32,7 @@ Comment on an existing issue
 \dontrun{
 
 ## set options
-options("jira_user" = "admin") ## my username is admin
+options("jira_user" = "my_user_name")
 options("jira_password" = "xxxx")
 options("jira_url" = "jira/")
 options("jira_project" = "BAS")
@@ -47,7 +47,7 @@ my_comment <- "
  ** point 1.1
  * point 2
 "
-add_comment(issue = "BAS-1", comment = my_comment) ## formatting works
+add_comment(issue = "BAS-1", comment = my_comment) ## test formatting
 
 
 ## write a data.frame as a table

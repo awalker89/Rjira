@@ -9,7 +9,30 @@
 #' @return Issue object
 #' @export
 #' @examples
+#' 
+#'  \dontrun{
+#'  
+#' options("jira_user" = "my_user_name") ## my username is admin
+#' options("jira_password" = "xxxx")
+#' options("jira_url" = "jira/")
+#' options("jira_project" = "BAS")
+#' 
+#' 
 #' create_issue()
+#' issue$project_key <- "BAS"
+#' issue$assignee <- "my_assignee"
+#' issue$issue_type <- "Task"
+#' issue$summary <- "TEST 1"
+#' issue$description <- list("This look concerning", head(iris, 4))
+#' issue$components <- "Some existing component"
+#' issue$custom_fields <- list("customfield_11131" = "ADM-283", ## Link to EPIC
+#'                             "customfield_11130" = "115") 
+#' 
+#' 
+#'   post_issue(issue) ## post to JIRA using options()
+#' 
+#' }
+#' 
 create_issue <- function(){
   return(Issue$new())
 }
@@ -74,18 +97,21 @@ Issue$methods(to_issue_list = function(){
   fields$issuetype <- c(name = issue_type)
   
 
+
   if(!is.null(description)){
     
-    if(is.list(description)){
+    desc <- description
+    
+    if(is.list(desc)){
       
-      desc_classes <- lapply(description, class)
+      desc_classes <- lapply(desc, class)
       df_inds <- sapply(desc_classes, function(cl) "data.frame" %in% cl)
       if(any(df_inds))
-        description[df_inds] <- sapply(description[df_inds], df_to_jira_table)
+        desc[df_inds] <- sapply(desc[df_inds], df_to_jira_table)
 
     }   
     
-    fields$description <- paste(description, collapse = "\n", sep = "\n")
+    fields$description <- paste(desc, collapse = "\n", sep = "\n")
     
   }
   

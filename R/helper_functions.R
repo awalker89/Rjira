@@ -16,7 +16,7 @@ search_url <- function(jira_url = getOption("jira_url")){
   if(is.null(jira_url))
     return(NULL)
   
-  search_url <- paste(jira_url, "rest/api/latest/search?", sep = "/")
+  search_url <- file.path(jira_url, "rest/api/latest/search?")
   
   return(search_url)
   
@@ -38,7 +38,7 @@ issue_url <- function(jira_url = getOption("jira_url")){
   if(is.null(jira_url))
     return(NULL)
   
-  issue_url <- paste(jira_url, "rest/api/latest/issue/", sep = "/")
+  issue_url <- file.path(jira_url, "rest/api/latest/issue/")
   
   return(issue_url)
   

@@ -36,7 +36,6 @@ get_projects <- function(jira_url = getOption("jira_url")
 #' @name get_issues
 #' @title Get issues assigned to a user
 #' @param user user to search for
-#' @param issue An existing issue id or key.
 #' @param jira_url base JIRA url
 #' @param jira_user username for authentication
 #' @param jira_password password for authentication
@@ -44,9 +43,25 @@ get_projects <- function(jira_url = getOption("jira_url")
 #' @export
 #' @seealso \code{\link{search_url}}
 #' @examples
+#' 
+#' \dontrun{
+#' 
 #' get_issues(user = "admin")
+#' 
+#' issues <- get_issues(project = "ADM", issue = "ADM-6", verbose = T)
+#' 
+#' ## Get list of issues assigned to user
+#' res <- get_issues(user = "admin" , project_key = getOption("jira_project"))
+#' sapply(res, "[[", "id")
+#' sapply(res, "[[", "key")
+#' 
+#' ## All projects
+#' res <- get_issues(user = "admin" , project_key = NULL)
+#' 
+#' }
+#' 
+#' 
 get_issues <- function(user = NULL
-                       , issue
                        , project_key = getOption("jira_project")
                        , jira_url = getOption("jira_url")
                        , jira_user = getOption("jira_user")
@@ -62,11 +77,17 @@ get_issues <- function(user = NULL
   if(is.null(jira_password))
     stop("jira_password is NULL")
   
-  url <- paste0(search_url(jira_url = jira_url), sprintf('jql=project="%s"', project_key))
-  if(!is.null(user)){
-    url <- paste(url, sprintf('AND assignee="%s"', user))
+  url <- search_url(jira_url = jira_url)
+  if(!is.null(project_key)){
+    url <- paste0(url, sprintf('jql=project="%s"', project_key))
+    if(!is.null(user))
+      url <- paste(url, sprintf('AND assignee="%s"', user))
+  
+  }else if(!is.null(user)){
+    url <- paste0(url, sprintf('jql=assignee="%s"', project_key))
   }
   
+
   res <- jira_get(url = url, user = jira_user, password = jira_password, verbose = verbose)
   res <- content(res, as = "parsed")
   res <- res$issues
